@@ -1,2 +1,2 @@
 # StreamerCap
-A website that ranks live streams on all platforms.
+A website that ranks live streamers across platforms.
