@@ -9,6 +9,31 @@
 <body>
     <header>
         <h1>StreamerCap</h1>
+        <body>
+            
+            <table>
+                <tr>
+                    <th>Rank</th>
+                    <th>Streamer</th>
+                    <th>Title</th>
+                    <th>Platform</th>
+                    <th>Viewers</th>
+                    <th>Average Viewers</th>
+                </tr>
+                {% for streamer in streamers %}
+                <tr>
+                    <th>{{ forloop.counter }}</th>
+                    <th>{{ streamer.streamer }}</th>
+                    <th>{{ streamer.title }}</th>
+                    <th>{{ streamer.streamer.platform }}</th>
+                    <th>{{ streamer.current_viewers }}</th>
+                    <th>{{ streamer.avg_viewers }}</th>
+                </tr>
+                {% endfor %}
+            </table>
+                
+            
+        </body>
     </header>
 </body>
 </html>
