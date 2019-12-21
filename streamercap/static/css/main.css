@@ -1,0 +1,44 @@
+table, th, tr {
+    border-bottom: 1px solid rgb(172, 159, 159);
+    border-collapse: collapse;
+}
+
+
+/* mobile */
+body{
+    display: grid;
+    grid-gap: 1em;
+    min-height: 100vh;
+    grid: 
+    'header' auto
+    'table' 1fr
+    'footer' auto
+    / 1fr
+    ;
+}
+
+/* Desktop */
+@media (min-width: 70em){
+    body{
+        grid:
+            'header header header header header' auto
+            ' . table table table . ' 1fr
+            ' . table table table . ' auto
+            'footer footer footer footer footer' auto
+            / 1fr 1fr 2fr 2fr 1fr;
+    }
+}
+
+
+
+header{
+    grid-area: header;
+}
+
+table{
+    grid-area: table;
+}
+
+footer{
+    grid-area: footer;
+}
