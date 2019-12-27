@@ -1,34 +1,37 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&display=swap" >
     <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
     <title>StreamerCap</title>
 </head>
 <body>
     <header>
-        <h1>StreamerCap</h1>
+        <h1>Streamer<span style="font-weight:800; color: rgb(245, 59, 59);">Cap</span></h1>
     </header>
     <table>
-        <tr>
-            <th>#</th>
-            <th>Streamer</th>
+        <tr id='table-header'>
+            <th class='rank'>#</th>
+            <th class='streamer'>Streamer</th>
             <th>Viewers</th>
+            <th class= 'platform'>Platform</th>
             <th>Title</th>
-            <th>Platform</th>
             <th>Average Viewers</th>
         </tr>
         {% for streamer in streamers %}
         <tr>
-            <th>{{ forloop.counter }}</th>
-            <th>{{ streamer.streamer }}</th>
-            <th>{{ streamer.current_viewers }}</th>
-            <th>{{ streamer.title }}</th>
-            <th>{{ streamer.streamer.platform }}</th>
-            <th>{{ streamer.avg_viewers }}</th>
+            <td class='rank'>{{ forloop.counter }}</td>
+            <td class='streamer'><a href="#">{{ streamer.0.streamer }}</a></td>
+            <td class='viewership'>{{ streamer.1|intcomma }}</td>
+            <td class='platform'>{{ streamer.0.streamer.platform }}</td>
+            <td>{{ streamer.0.title|truncatechars:20 }}</td>
+            <td>{{ streamer.avg_viewers }}</td>
+            
         </tr>
         {% endfor %}
     </table>
@@ -37,4 +40,4 @@
         <p>blah blah</p>
     </footer>
 </body>
-</html>
+</html> 
