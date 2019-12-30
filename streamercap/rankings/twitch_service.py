@@ -20,19 +20,19 @@ def get_streamer_usernames(num=10):
 
 
 
-# temporarily fill database with dummy data
-
 def streams_to_db(num=100):
-    
+    online_titles = set()
     streams = get_top_streams(num)
     for stream in streams["data"]:
+        title = stream["title"]
+        online_titles.add(title)
         streamer, created = Streamer.objects.get_or_create(
             username=stream["user_name"],
             platform="Twitch"
         )
         session, created = LiveSession.objects.get_or_create(
             streamer=streamer,
-            title=stream["title"],
+            title=title,
             is_live=True,
             #start_time=datetime.now()
         )
@@ -40,9 +40,18 @@ def streams_to_db(num=100):
             live_session = session,
             viewer_count = stream["viewer_count"]
         )
-            
-        
+        session.set_viewer_count()
+        session.save()
+    
+    set_streams_offline(online_titles)
 
+
+def set_streams_offline(online_titles):
+    offline_streams = LiveSession.objects.filter(is_live=True).exclude(title__in=online_titles)       
+        
+    for stream in offline_streams:
+        stream.is_live = False
+        stream.save()
 
 
 

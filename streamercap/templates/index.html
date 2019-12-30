@@ -18,19 +18,21 @@
         <tr id='table-header'>
             <th class='rank'>#</th>
             <th class='streamer'>Streamer</th>
-            <th>Viewers</th>
-            <th class= 'platform'>Platform</th>
+            <th class='viewership_header'>Viewers</th>
+            <th class='category_header'>Category</th>
+            <th class='platform'>Platform</th>
             <th>Title</th>
-            <th>Average Viewers</th>
+            {% comment %} <th>Average Viewers</th> {% endcomment %}
         </tr>
         {% for streamer in streamers %}
         <tr>
             <td class='rank'>{{ forloop.counter }}</td>
-            <td class='streamer'><a href="#">{{ streamer.0.streamer }}</a></td>
-            <td class='viewership'>{{ streamer.1|intcomma }}</td>
-            <td class='platform'>{{ streamer.0.streamer.platform }}</td>
-            <td>{{ streamer.0.title|truncatechars:20 }}</td>
-            <td>{{ streamer.avg_viewers }}</td>
+            <td class='streamer'><a href="#">{{ streamer.streamer }}</a></td>
+            <td class='viewership'>{{ streamer.viewer_count|intcomma }}</td>
+            <td class='category'>League of Legends</td>
+            <td class='platform'>Twitch</td>
+            <td>{{ streamer.title|truncatechars:20 }}</td>
+            <!-- <td>{{ streamer.avg_viewers }}</td>  -->
             
         </tr>
         {% endfor %}
