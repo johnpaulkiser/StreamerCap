@@ -4,9 +4,16 @@ import json
 from datetime import datetime
 from .models import Streamer, LiveSession, Viewership
 
+
+
+with open('/etc/config.json') as config_file:
+    config = json.load(config_file)
+
+
+
 def get_top_streams(num=1000):
     URL = f'https://api.twitch.tv/helix/streams?first={num}'
-    headers = {'Client-ID': os.environ['TWITCH_ID']}
+    headers = {'Client-ID': config['TWITCH_ID']}
     r = requests.get(url=URL, headers=headers)
     return r.json()
 
@@ -23,6 +30,7 @@ def get_streamer_usernames(num=10):
 def streams_to_db(num=100):
     online_titles = set()
     streams = get_top_streams(num)
+    print(streams, 'hi')
     for stream in streams["data"]:
         title = stream["title"]
         online_titles.add(title)
