@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     config_location = 'config.json'
