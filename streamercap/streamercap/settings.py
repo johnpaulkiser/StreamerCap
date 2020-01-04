@@ -13,7 +13,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-with open('/etc/config.json') as config_file:
+DEBUG = True
+
+if DEBUG:
+    config_location = 'config.json'
+else:
+    config_location = '/etc/config.json'
+
+with open(config_location) as config_file:
     config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,13 +33,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config['SECRET_KEY']
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
 ALLOWED_HOSTS = [
         "3.84.61.175",
         "streamercap.com",
-        "www.streamercap.com"
+        "www.streamercap.com",
+        "localhost"
 ]
 
 
@@ -131,7 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'media'
+MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
