@@ -27,10 +27,10 @@
         {% for streamer in streamers %}
         <tr>
             <td class='rank'>{{ forloop.counter }}</td>
-            <td class='streamer'><a href="#">{{ streamer.streamer }}</a></td>
+            <td class='streamer'><a href="{{ streamer.stream_link }}">{{ streamer.streamer }}</a></td>
             <td class='viewership'>{{ streamer.viewer_count|intcomma }}</td>
             <td class='category'>League of Legends</td>
-            <td class='platform'>Twitch</td>
+            <td class='platform'>{{ streamer.streamer.platform }}</td>
             <td>{{ streamer.title|truncatechars:20 }}</td>
             <!-- <td>{{ streamer.avg_viewers }}</td>  -->
             

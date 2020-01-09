@@ -35,12 +35,19 @@ class LiveSession(models.Model):
     end_time = models.DateTimeField(null=True, blank=True) 
     
 
+    @property
+    def stream_link(self):
+
+        return f'https://{self.streamer.platform}.com/{self.streamer}'
+
     
     def set_viewer_count(self):
         ''' sets the most recent viewership '''
         self.viewer_count = Viewership.objects.filter(
             live_session=self
             )[0].viewer_count
+
+
 
 
     def __str__(self):
