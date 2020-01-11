@@ -21,8 +21,7 @@
             <th class='viewership_header'>Viewers</th>
             <th class='category_header'>Category</th>
             <th class='platform'>Platform</th>
-            <th>Title</th>
-            {% comment %} <th>Average Viewers</th> {% endcomment %}
+            <th class='title_header'>Title</th>
         </tr>
         {% for streamer in streamers %}
         <tr>
@@ -31,15 +30,13 @@
             <td class='viewership'>{{ streamer.viewer_count|intcomma }}</td>
             <td class='category'>League of Legends</td>
             <td class='platform'>{{ streamer.streamer.platform }}</td>
-            <td>{{ streamer.title|truncatechars:20 }}</td>
-            <!-- <td>{{ streamer.avg_viewers }}</td>  -->
-            
+            <td class='title'>{{ streamer.title|truncatechars:20 }}</td>
         </tr>
         {% endfor %}
     </table>
         
     <footer>
-        <p>blah blah</p>
+        <a href="https://docs.google.com/forms/d/1ZjqDwd2v8-ofRiZxccTygMIsj4V1A0bvkSXH6qmfcqw/viewform?edit_requested=true">Give feedback?</a>
     </footer>
 </body>
 </html> 

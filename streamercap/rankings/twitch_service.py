@@ -32,9 +32,10 @@ def get_streamer_usernames(num=10):
 
 
 def streams_to_db(num=100):
+    
     online_titles = set()
     streams = get_top_streams(num)
-    print(streams, 'hi')
+    print(streams)
     for stream in streams["data"]:
         title = stream["title"]
         online_titles.add(title)
