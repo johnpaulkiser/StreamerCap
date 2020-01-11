@@ -15,12 +15,7 @@ import json
 
 DEBUG = True
 
-if DEBUG:
-    config_location = 'config.json'
-else:
-    config_location = '/etc/config.json'
-
-with open(config_location) as config_file:
+with open('/etc/config.json') as config_file:
     config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
