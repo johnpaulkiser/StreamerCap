@@ -1,9 +1,6 @@
-import os
 import requests
 import json
-from datetime import datetime
 from .models import Streamer, LiveSession, Viewership
-from streamercap.settings import DEBUG
 
 
 with open('/etc/config.json') as config_file:
@@ -19,54 +16,62 @@ def get_top_streams(num=1000):
 
 
 
-def get_streamer_usernames(num=10):
-
-    streamer_list = get_top_streams(num)["data"]
-    return [streamer["user_name"] for streamer in streamer_list]
-
+def get_game_by_id(game_id):
+    URL = f'https://api.twitch.tv/helix/games?id={game_id}'
+    headers = {'Client-ID': config['TWITCH_ID']}
+    r = requests.get(url=URL, headers=headers)
+    return r.json()['data'][0]['name']
 
 
 
 def streams_to_db(num=100):
     
-    online_titles = set()
+    with open('games.json', 'r') as json_games:
+        games_dict = json.loads(json_games.read())
+    online_streamers = set()
+
     streams = get_top_streams(num)
-    print(streams)
-    for stream in streams["data"]:
-        title = stream["title"]
-        online_titles.add(title)
+    for stream in streams['data']:
+        
+        
         streamer, created = Streamer.objects.get_or_create(
-            username=stream["user_name"],
-            platform="Twitch"
+            username=stream['user_name'],
+            platform='Twitch'
         )
+        game_id = stream['game_id']
+        online_streamers.add(streamer.id)
+        try:
+            game = games_dict[game_id]
+        except KeyError:
+            game = games_dict[game_id] = get_game_by_id(game_id)
+            
+
         session, created = LiveSession.objects.get_or_create(
             streamer=streamer,
-            title=title,
             is_live=True,
-            #start_time=datetime.now()
         )
+        session.title = stream['title']
+        session.game = game
+        
         Viewership.objects.create(
             live_session = session,
-            viewer_count = stream["viewer_count"]
+            viewer_count = stream['viewer_count']
         )
         session.set_viewer_count()
         session.save()
+        
     
-    set_streams_offline(online_titles)
+    set_streams_offline(online_streamers)
+    
+    with open('games.json', 'w') as out_file:
+        json.dump(games_dict, out_file, indent=2)
 
 
-def set_streams_offline(online_titles):
-    offline_streams = LiveSession.objects.filter(is_live=True).exclude(title__in=online_titles)       
+def set_streams_offline(online_streamers):
+
+    offline_streams = LiveSession.objects.filter(is_live=True).exclude(streamer__in=online_streamers)       
         
     for stream in offline_streams:
         stream.is_live = False
         stream.save()
 
-
-
-
-
-
-# if __name__ == "__main__":
-#     # print(get_streamer_usernames())
-#     print(json.dumps(get_top_streams(1), indent=4))

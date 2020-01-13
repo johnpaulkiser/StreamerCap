@@ -10,7 +10,6 @@ from .twitch_service import streams_to_db
 
 def landing(request):
 
-    streams_to_db(100)
     ''' gets most recent Livesessions viewership counts '''
     currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
 
