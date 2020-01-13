@@ -28,7 +28,7 @@
             <td class='rank'>{{ forloop.counter }}</td>
             <td class='streamer'><a href="{{ streamer.stream_link }}">{{ streamer.streamer }}</a></td>
             <td class='viewership'>{{ streamer.viewer_count|intcomma }}</td>
-            <td class='category'>League of Legends</td>
+            <td class='category'>{{ streamer.game }}</td>
             <td class='platform'>{{ streamer.streamer.platform }}</td>
             <td class='title'>{{ streamer.title|truncatechars:20 }}</td>
         </tr>
@@ -36,7 +36,7 @@
     </table>
         
     <footer>
-        <a href="https://docs.google.com/forms/d/1ZjqDwd2v8-ofRiZxccTygMIsj4V1A0bvkSXH6qmfcqw/viewform?edit_requested=true">Give feedback?</a>
+        <a href="https://docs.google.com/forms/d/1ZjqDwd2v8-ofRiZxccTygMIsj4V1A0bvkSXH6qmfcqw/viewform?edit_requested=true">Have feedback?</a>
     </footer>
 </body>
 </html> 

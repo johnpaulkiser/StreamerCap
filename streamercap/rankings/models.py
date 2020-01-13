@@ -26,6 +26,7 @@ class LiveSession(models.Model):
     streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     viewer_count = models.IntegerField(null=True, blank=True)
+    game = models.CharField(max_length=200)
     # max_viewers = models.IntegerField()
     # avg_viewers = models.IntegerField()
     is_live = models.BooleanField()
@@ -43,6 +44,7 @@ class LiveSession(models.Model):
     
     def set_viewer_count(self):
         ''' sets the most recent viewership '''
+
         self.viewer_count = Viewership.objects.filter(
             live_session=self
             )[0].viewer_count
