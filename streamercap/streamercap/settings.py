@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-DEBUG = True
+DEBUG = False
 
 with open('/etc/config.json') as config_file:
     config = json.load(config_file)
