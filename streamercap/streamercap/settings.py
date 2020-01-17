@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-DEBUG = False
+DEBUG = True
 
-with open('/etc/config.json') as config_file:
+with open('config.json') as config_file:
     config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

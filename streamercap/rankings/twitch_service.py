@@ -3,7 +3,7 @@ import json
 from .models import Streamer, LiveSession, Viewership
 
 
-with open('/etc/config.json') as config_file:
+with open('config.json') as config_file:
     config = json.load(config_file)
 
 
@@ -20,6 +20,7 @@ def get_game_by_id(game_id):
     URL = f'https://api.twitch.tv/helix/games?id={game_id}'
     headers = {'Client-ID': config['TWITCH_ID']}
     r = requests.get(url=URL, headers=headers)
+    print(r.json())
     return r.json()['data'][0]['name']
 
 
@@ -28,9 +29,11 @@ def streams_to_db(num=100):
     
     with open('games.json', 'r') as json_games:
         games_dict = json.loads(json_games.read())
+
     online_streamers = set()
 
     streams = get_top_streams(num)
+    print(json.dumps(streams, indent=2))
     for stream in streams['data']:
         
         
@@ -39,11 +42,18 @@ def streams_to_db(num=100):
             platform='Twitch'
         )
         game_id = stream['game_id']
+       
         online_streamers.add(streamer.id)
         try:
             game = games_dict[game_id]
         except KeyError:
-            game = games_dict[game_id] = get_game_by_id(game_id)
+            # TODO --- need to handle this exception differently
+            #sometimes twitch will return a game an empty game id ''
+            if game_id == '': 
+                continue
+
+            game_title  = get_game_by_id(game_id)
+            game = games_dict[game_id] = game_title
             
 
         session, created = LiveSession.objects.get_or_create(
@@ -61,15 +71,17 @@ def streams_to_db(num=100):
         session.save()
         
     
-    set_streams_offline(online_streamers)
+    set_streams_offline(online_streamers, 'Twitch')
     
     with open('games.json', 'w') as out_file:
         json.dump(games_dict, out_file, indent=2)
 
 
-def set_streams_offline(online_streamers):
 
-    offline_streams = LiveSession.objects.filter(is_live=True).exclude(streamer__in=online_streamers)       
+
+def set_streams_offline(online_streamers, platform):
+
+    offline_streams = LiveSession.objects.filter(is_live=True, streamer__platform=platform).exclude(streamer__in=online_streamers)       
         
     for stream in offline_streams:
         stream.is_live = False
