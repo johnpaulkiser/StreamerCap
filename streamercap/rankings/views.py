@@ -13,5 +13,4 @@ def landing(request):
     ''' gets most recent Livesessions viewership counts '''
     currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
 
-
     return render(request, 'index.html', context={"streamers": currently_live})
