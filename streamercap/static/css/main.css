@@ -49,6 +49,10 @@ th, td {
     text-align: center;
 }
 
+.category {
+    padding-left: 2em;
+}
+
 .title_header, .title {
     text-align: right;
 }
