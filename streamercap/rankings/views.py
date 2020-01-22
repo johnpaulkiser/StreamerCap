@@ -3,6 +3,7 @@ from django.db.models import Max, F
 from django.core.paginator import Paginator
 from rankings.models import LiveSession, Viewership
 from .twitch_service import streams_to_db
+from django.http import JsonResponse
 
 
 
@@ -10,7 +11,12 @@ from .twitch_service import streams_to_db
 
 def landing(request):
 
+    return render(request, 'index.html')
+
+def default_filters(request):
+
     ''' gets most recent Livesessions viewership counts '''
     currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
 
-    return render(request, 'index.html', context={"streamers": currently_live})
+    live_dicts = [ session.as_dict() for session in currently_live ]
+    return JsonResponse({"data": live_dicts}) 
