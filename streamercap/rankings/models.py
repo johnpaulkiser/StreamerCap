@@ -50,6 +50,15 @@ class LiveSession(models.Model):
             )[0].viewer_count
 
 
+    def as_dict(self):
+        return {
+            "rank": self.rank,
+            "streamer": self.streamer.__str__(),
+            "viewership": self.viewer_count,
+            "category": self.game,
+            "platform": self.streamer.platform,
+            "title": self.title
+        }
 
 
     def __str__(self):

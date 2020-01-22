@@ -8,15 +8,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&display=swap" >
     <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+    <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
     <title>StreamerCap</title>
 </head>
-<body>
+<body onload="getIndex()">
     <header>
         <h1>Streamer<span style="font-weight:800; color: rgb(245, 59, 59);">Cap</span></h1>
         <h3 id="subtitle">Browse the most popular livestreams on the internet.</h3>
     </header>
     
     <main>
+
         <div class="filter-categories">
             <button id="lang" onclick="drop(this.id)">Language</button>
             <button id="game" onclick="drop(this.id)">Game</button>
@@ -25,7 +27,8 @@
             <!-- <button>Lorem</button>
             <button>Ipsum</button> -->
         </div>
-        <table>
+
+        <table id="table">
             <tr id='table-header'>
                 <th class='rank'>#</th>
                 <th class='streamer'>Streamer</th>
@@ -34,7 +37,7 @@
                 <th class='platform'>Platform</th>
                 <th class='title_header'>Title</th>
             </tr>
-            {% for streamer in streamers %}
+            <!-- {% for streamer in streamers %}
             <tr>
                 <td class='rank'>{{ forloop.counter }}</td>
                 <td class='streamer'><a href="{{ streamer.stream_link }}">{{ streamer.streamer }}</a></td>
@@ -43,12 +46,13 @@
                 <td class='platform'>{{ streamer.streamer.platform }}</td>
                 <td class='title'>{{ streamer.title|truncatechars:20 }}</td>
             </tr>
-            {% endfor %}
+            {% endfor %} -->
         </table>
     </main>
     
     <footer>
         <a href="https://docs.google.com/forms/d/1ZjqDwd2v8-ofRiZxccTygMIsj4V1A0bvkSXH6qmfcqw/viewform?edit_requested=true">Have feedback?</a>
     </footer>
+
 </body>
 </html> 
