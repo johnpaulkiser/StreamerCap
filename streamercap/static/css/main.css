@@ -2,7 +2,6 @@ html {
     font-family: Arial, Helvetica, sans-serif;
     background-color: rgb(246, 246, 246);
 }
-
 .streamer a{
     text-decoration: none;
     color: rgb(15, 15, 15);
@@ -51,6 +50,26 @@ th, td {
 .viewership_header {
     text-align: right;
 }
+
+#end-wrapper {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+
+}
+#load-more{
+    flex-grow: 0;
+}
+#goto-top{
+    flex-grow: 0;
+}
+#load-more:hover {
+    background: rgb(61, 122, 61);
+}
+#goto-top:hover {
+    background: rgb(153, 65, 65);
+}
+
 
 .viewership {
     color: rgb(22, 22, 255);

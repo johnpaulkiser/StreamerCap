@@ -4,20 +4,27 @@ from django.core.paginator import Paginator
 from rankings.models import LiveSession, Viewership
 from .twitch_service import streams_to_db
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 
 
-
+@csrf_exempt
 def landing(request):
+
+    if request.method == "POST":
+        currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
+
+        live_dicts = [ session.as_dict() for session in currently_live ]
+        return JsonResponse({"data": live_dicts}) 
 
     return render(request, 'index.html')
 
-def default_filters(request):
+# def default_filters(request):
 
-    ''' gets most recent Livesessions viewership counts '''
-    print(request)
-    currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
+#     ''' gets most recent Livesessions viewership counts '''
+#     print(request)
+#     currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
 
-    live_dicts = [ session.as_dict() for session in currently_live ]
-    return JsonResponse({"data": live_dicts}) 
+#     live_dicts = [ session.as_dict() for session in currently_live ]
+#     return JsonResponse({"data": live_dicts}) 

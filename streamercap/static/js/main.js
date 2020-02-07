@@ -1,18 +1,19 @@
+let filterBy = {
+    "page": 1,
+    "platform": [],
+    "game": [],
+    "language": []
+}
+updatePageFilters(filterBy);
+document.getElementById("goto-top").addEventListener("click", ()=>{
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+})
 
-
-//test function for ajax
-function getLeagueOfLegends(){
-    let table = document.getElementById("table");
-    fetch('http://localhost:8000/default', {'game':'League of Legends'})    
-    console.log("hey")
-    .then((response) => {
-        return response.json();
-    })
-    .then((streams) => {
+function updatePageFilters(filterBy){
+    getPageData(filterBy).then((streams) => {
         streams = streams["data"];
         console.log(streams[0]);
-       
-       
+    
         for(let i = 0; i < streams.length; i++){
             let row = table.insertRow(-1);
             streams[i]["rank"] = i+1;
@@ -21,26 +22,18 @@ function getLeagueOfLegends(){
     });
 }
 
-document.getElementById("game").addEventListener("click", getLeagueOfLegends)
 
-function getIndex(){
+async function getPageData(data = {}){
     let table = document.getElementById("table");
-    fetch('http://localhost:8000/default')
-        
-        .then((response) => {
-        return response.json();
-    })
-    .then((streams) => {
-        streams = streams["data"];
-        console.log(streams[0]);
-       
-       
-        for(let i = 0; i < streams.length; i++){
-            let row = table.insertRow(-1);
-            streams[i]["rank"] = i+1;
-            populateRow(row, streams[i]);    
-        }
+    const response = await fetch('http://localhost:8000/', {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(filterBy)
+
     });
+    return await response.json();
 }
 
 function populateRow(row, stream) {

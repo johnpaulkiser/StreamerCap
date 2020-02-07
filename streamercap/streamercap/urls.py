@@ -15,10 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rankings.views import landing, default_filters
+from rankings.views import landing
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing, name='landing'),
-    path('default', default_filters, name='default_filters')
 ]
