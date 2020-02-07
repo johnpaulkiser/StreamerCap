@@ -19,25 +19,35 @@ def get_top_streams(cursor=None):
 
 
 def get_top_games(num_pages):
-    
-    
+    ''' Queries the twitch api to get the top (num_pages*100) games '''
+
+    # open games file
     with open('games.json', 'r') as json_games:
         games_dict = json.loads(json_games.read())
 
     URL = f'https://api.twitch.tv/helix/games/top?first=100'
     headers = {'Client-ID': config['TWITCH_ID']}
     cursor = "none"
+
     for i in range(num_pages):
+
+        # set url to paginated_url
         if cursor != "none":
             paginated_URL = f'&after={cursor}'
             URL = URL + paginated_URL
-        r = requests.get(url=URL, headers=headers)
-
-        for game in r.json()["data"]:
+            
+        response = requests.get(url=URL, headers=headers).json()
+        # update the pagination cursor
+        cursor = response["pagination"]["cursor"]
+        
+        # store games as keys in dictionary
+        for game in response["data"]:
             games_dict[game["id"]] = game["name"]
 
+    #save games dictionary to file
     with open('games.json', 'w') as out_file:
         json.dump(games_dict, out_file, indent=2)
+
 
 
 def get_game_by_id(game_id):

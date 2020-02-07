@@ -44,6 +44,18 @@ function getIndex(){
 }
 
 function populateRow(row, stream) {
+
+    /*  Example response object from server:
+        {
+            "rank": null,
+            "streamer": "summit1g",
+            "viewership": 34527,
+            "category": "Escape from Tarkov",
+            "platform": Twitch,
+            "title": "just playing howerver..."
+        }
+    */
+
     
     let classNames = Object.keys(stream);
     const logos = {
@@ -86,7 +98,10 @@ function populateRow(row, stream) {
             };
             cell.appendChild(img);
             
-        } else 
+        } else if (className === "viewership"){
+            //gives viewer numbers commas
+            cell.innerHTML = stream["viewership"].toLocaleString()
+        } else
             cell.innerHTML = stream[className];
         
         cell.classList.add(className);
