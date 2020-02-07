@@ -175,16 +175,47 @@ header h1 {
     
 }
 
-
-
+/*                */
+/* Filter buttons */
+/*                */
 .filter-categories {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 2vh 0;
+    margin-bottom: 1vh;
 
 }
+
+
+.filter-items{
+  min-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid lightgrey;
+  
+}
+
+#lang-wrapper{
+    /* display: none; */
+}
+
+#game-wrapper{
+    display: none;
+    
+}
+
+#game-wrapper :hover{
+    background: rgb(23, 158, 106);
+}
+#platform-wrapper {
+    display: none;
+}
+
+
+
   
 button {
     font-size: 1em;
@@ -213,17 +244,34 @@ button:hover {
     box-shadow: -4px 6px 0px 0px rgba(0,0,0,0.75);
 }
 
-#langs>button{
-    background: lightgrey;
-}
-#langs>button :hover{
-    background: lightgreen;
+.button-toggle {
+    color: white;
+    -webkit-box-shadow: -6px 8px 0px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: -6px 8px 0px 1px rgba(0,0,0,0.75);
+    box-shadow: -4px 6px 0px 0px rgba(0,0,0,0.75);
 }
 
-#langs {
-    display: none;
+.filter-categories > .button-toggle {
+    background: #3b658f;
 }
-  
+
+#game-wrapper > .button-toggle {
+    background: #179e6a;
+}
+
+#Twitch.button-toggle {
+    background: #6441a5;
+}
+#Mixer.button-toggle{
+    background: #1FBAED;
+}
+
+#Twitch:hover{
+    background: #6441a5;
+}
+#Mixer:hover{
+    background: #1FBAED;
+}
 
 
 
@@ -234,6 +282,7 @@ body {
     display: grid;
     grid-gap: 1em;
     min-height: 100vh;
+    max-width: 100vw;
     grid: 
     'header' auto
     'main' 1fr
@@ -269,9 +318,7 @@ body {
         width: 15%
     }
 
-    .filter-categories {
-        margin-bottom: 4vh;
-    }
+    
 
     #subtitle{
         font-size: 2.5vh;

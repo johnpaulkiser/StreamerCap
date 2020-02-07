@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Count
 from django.core.paginator import Paginator
 from rankings.models import LiveSession, Viewership
 from django.http import JsonResponse
@@ -23,6 +24,18 @@ def landing(request):
         return JsonResponse({"data": live_dicts}) 
 
     return render(request, 'index.html')
+
+
+def get_filter_items(request, field, page):
+
+    if field == "platform":
+        return JsonResponse({"data": ["Twitch", "Mixer"]})  
+
+    items = LiveSession.objects.all().values(field).annotate(total=Count(field)).order_by('-total')
+    
+    paginator = Paginator(items, 10)
+    top_items = [session[field] for session in paginator.page(page)]
+    return JsonResponse({"data": top_items})  
 
 
 def build_filter_list(filter_data):

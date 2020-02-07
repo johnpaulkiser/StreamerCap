@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rankings.views import landing
+from rankings.views import landing, get_filter_items
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing, name='landing'),
+    path('<str:field>/<int:page>', get_filter_items)
 ]

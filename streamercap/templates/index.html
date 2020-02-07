@@ -20,13 +20,19 @@
     <main>
 
         <div class="filter-categories">
-            <button id="lang" onclick="drop(this.id)">Language</button>
+            <button id="lang">Language</button>
             <button id="game">Game</button>
-            <button id="platform" onclick="drop(this.id)">Platform</button>
-            <button id="length" onclick="drop(this.id)">Length</button>
+            <button id="platform">Platform</button>
+            <button id="length">Length</button>
             <!-- <button>Lorem</button>
             <button>Ipsum</button> -->
         </div>
+        
+        {% comment %} <div class="filter-items" id="lang-wrapper"></div> {% endcomment %}
+        <div class="filter-items" id="game-wrapper"></div>
+        <div class="filter-items" id="platform-wrapper"></div>
+       
+        
 
         <table id="table">
             <tr id='table-header'>

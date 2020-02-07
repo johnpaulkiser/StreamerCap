@@ -1,39 +1,116 @@
 let filterBy = {
     "page": 1,
-    "platform": ["Twitch", "Mixer"],
-    "game": ["League of Legends", "Fortnite", "Just Chatting"],
+    "platform": [],
+    "game": [],
     "language": []
 }
 
-updatePageFilters(filterBy);
+
+
+
 
 document.getElementById("goto-top").addEventListener("click", ()=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
 })
 
-document.getElementById("load-more").addEventListener("click", () => {
-    console.log(filterBy)
-    filterBy["page"]++;
-    updatePageFilters(filterBy);
-    console.log(filterBy);
-})
 
-function updatePageFilters(filterBy){
-    getPageData(filterBy).then((streams) => {
-        streams = streams["data"];
-        console.log(streams[0]);
-    
-        for(let i = 0; i < streams.length; i++){
-            let row = table.insertRow(-1);
-            streams[i]["rank"] = 100 * (filterBy["page"]-1) + i + 1; // keeps track of rank, needs refactor
-            populateRow(row, streams[i]);    
-        }
+
+//
+//
+/* Queries filter button data */
+//
+//
+
+// category fields are identical to their respective button ids
+// & get request field parameter
+let filter_categories = ["game", "platform"];
+
+initFilters(filter_categories);
+addCategoryListeners(filter_categories);
+
+function initFilters(categories){
+    console.log(categories);
+    categories.forEach(category => {
+        // get top 10 in category
+        getFilterData(category, 1).then((response) =>{
+            let wrapper = document.getElementById(category+"-wrapper");
+            //create button for every item in response
+            response.data.forEach(item => {
+                let btn = document.createElement("button");
+                btn.innerHTML = item;
+                btn.category = category;
+                btn.addEventListener("click", toggleFilter)
+                if (category === "platform")
+                    btn.setAttribute("id", item)
+                wrapper.append(btn);
+            });
+        });
+    });
+}
+
+function toggleFilter(e){
+    let btn = e.target;
+    let category = btn.category;
+
+    //check if button is already toggled
+    if(filterBy[category].includes(btn.innerHTML)){
+        
+        let i = filterBy[category].indexOf(btn.innerHTML);
+        if (i > -1) 
+            filterBy[category].splice(i, 1); //remove element from list
+        btn.classList.remove("button-toggle");
+    } else{
+        filterBy[category].push(btn.innerHTML);
+        btn.classList.add("button-toggle");
+    }
+    flushTable();
+    updateTableByFilters(filterBy);
+}
+
+
+function addCategoryListeners(categories){
+    categories.forEach(category => {
+        document.getElementById(category).addEventListener("click", (e)=> {
+            let wrapper = document.getElementById(`${category}-wrapper`);
+            console.log(wrapper.style.display);
+            if( wrapper.style.display === "none" || wrapper.style.display === ""){
+                wrapper.style.display = "flex";
+                e.target.classList.add("button-toggle");
+            } else {
+                wrapper.style.display = "none";
+                e.target.classList.remove("button-toggle");
+            }
+        })
     });
 }
 
 
+async function getFilterData(field, page){
+    /*  response format:
+        {data: ["item1", "item2", "item3", ... ]}
+    */
+    const response = await fetch(`http://localhost:8000/${field}/${page}`)
+    return await response.json();
+}
+
+
+
+//
+//
+/* Queries Table Data */
+//
+//
+updateTableByFilters(filterBy);
+
+// gets 100 more table items according to global filter
+document.getElementById("load-more").addEventListener("click", () => {
+    filterBy["page"]++;
+    updateTableByFilters(filterBy);
+    console.log(filterBy);
+})
+
 async function getPageData(data = {}){
-    let table = document.getElementById("table");
+    
     const response = await fetch('http://localhost:8000/', {
         method: 'POST',
         headers:{
@@ -45,7 +122,26 @@ async function getPageData(data = {}){
     return await response.json();
 }
 
-function populateRow(row, stream) {
+
+function updateTableByFilters(filterBy){
+    let table = document.getElementById("table");
+    getPageData(filterBy).then((streams) => {
+        streams = streams["data"];
+        for(let i = 0; i < streams.length; i++){
+            let row = table.insertRow(-1);
+            streams[i]["rank"] = 100 * (filterBy["page"]-1) + i + 1; // keeps track of rank, needs refactor
+            populateTableRow(row, streams[i]);    
+        }
+    });
+}
+
+function flushTable(){
+    document.getElementById("table").innerHTML = "";
+    filterBy["page"] = 1;
+}
+
+
+function populateTableRow(row, stream) {
 
     /*  Example response object from server:
         {
@@ -94,7 +190,6 @@ function populateRow(row, stream) {
             img.classList.add(platform);
             img.classList.add("logo");
             img.src = logos[platform];
-            console.log(img.src);
             img.onclick = () => {
                 window.open("https://www."+platform+".com/");
             };
@@ -111,3 +206,4 @@ function populateRow(row, stream) {
 }
 
 
+/* Extra page functionality */
