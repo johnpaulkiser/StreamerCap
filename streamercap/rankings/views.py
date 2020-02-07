@@ -16,6 +16,7 @@ def landing(request):
 def default_filters(request):
 
     ''' gets most recent Livesessions viewership counts '''
+    print(request)
     currently_live = LiveSession.objects.filter(is_live=True).order_by('-viewer_count')
 
     live_dicts = [ session.as_dict() for session in currently_live ]

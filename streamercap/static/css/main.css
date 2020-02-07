@@ -6,32 +6,44 @@ html {
 .streamer a{
     text-decoration: none;
     color: rgb(15, 15, 15);
+    
 }
 
 .streamer a:hover{
     text-decoration: underline;
 }
 
+
 table, th, tr {
     border-bottom: .6px solid rgb(194, 194, 194);
     border-collapse: collapse;
-    position: relative;
+}
+
+th {
+    font-size: 3.5vw;
 }
 
 #table-header {
     font-size: larger;
-    position: sticky;
-    top: 0;
 }
 
+#table {
+    margin-top: 5vh;
+    text-align: center;
+    table-layout: fixed;
+    width:100%;
+}
 
 th, td {
-    padding: 1em;
+    padding: 1em 0 1em 0;
     text-align: left;
 }
+
 .streamer, .rank {
     font-weight: bold;
 }
+
+
 .platform {
     text-align: center;
 }
@@ -46,20 +58,76 @@ th, td {
 }
 
 .category_header {
-    text-align: center;
+    text-align: left;
+    padding-left: 3vw;
 }
 
 .category {
     padding-left: 2em;
+    /* line-height: 3vh; */
+    overflow: auto;
 }
 
+
 .title_header, .title {
-    text-align: right;
+    text-align: center;
+    display: none;
+}
+
+.title {
+    position: relative;
+    
+}
+
+.streamer{
+    text-align: center;
+    overflow: auto;
+    
+}
+.streamer>a{
+    font-weight: lighter;
+}
+
+.rank{
+    width: 10%;
+    padding-left: 4vw;
+}
+
+.logo {
+    cursor: pointer;
+}
+
+.Twitch {
+    width: 40px;
+}
+
+.Mixer {
+    width: 30px;
+}
+
+.tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgba(0, 0, 0, 0.728);
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    width: 100%;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px; 
+    position: absolute;
+    z-index: 1;
+}
+
+.title:hover .tooltip {
+    visibility: visible;
 }
 
 #subtitle{
     text-align: center;
-    font-size: 20px;
+    font-size: 3.5vw;
     font-style: italic;
     color: #464646;
     
@@ -89,19 +157,16 @@ header h1 {
 
     
 }
-header {
-    margin-bottom: 4em;
-    /* padding-bottom: 4em; */
-    border-bottom: .25px solid rgb(194, 194, 194);
-    
-}
+
 
 
 .filter-categories {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-bottom: 3em;
+    justify-content: center;
+    margin: 2vh 0;
+
 }
   
 button {
@@ -113,8 +178,7 @@ button {
     border:  1.5px solid #0e2439;
     border-radius: 100px;
     padding: .75em 1em;
-    margin: .15em .25em;
-
+    margin: .25em;
     flex-grow: 1;
 }
   
@@ -147,12 +211,6 @@ button:hover {
 
 
 
-
-
-
-
-
-
 /* LAYOUT */
 /* mobile */
 body {
@@ -165,28 +223,93 @@ body {
     'footer' auto
     / 1fr
     ;
+
+}
+
+@media (min-width: 50em){
+    .title {
+        display: inline-block;
+    }
+    .title_header {
+        display: block;
+        border-bottom: none;
+    }
+    th{
+        font-size: 2.5vw;
+    }
+    .streamer>a{
+        font-weight: bold;
+    }
+
+    #table{
+        table-layout: auto;
+        margin-left: 0;
+    }
+    .category_header{
+        padding-left: 2vw;
+    }
+    .category{
+        width: 15%
+    }
+
+    .filter-categories {
+        margin-bottom: 4vh;
+    }
+
+    #subtitle{
+        font-size: 2.5vh;
+    }
+
+    header{
+        border-bottom: .25px solid rgb(194, 194, 194);
+    }
 }
 
 /* Desktop */
-@media (min-width: 70em) {
+@media (min-width: 65em) {
+
     body {
+        
         grid:
-            'header header header header header' auto
-            ' . main main main . ' 1fr
-            ' . main main main . ' auto
-            'footer footer footer footer footer' auto
-            / 2fr 1fr 2fr 2fr 2fr;
+            'header header header' auto
+            ' . main . ' 1fr
+            ' . main . ' auto
+            'footer footer footer' auto
+            / 2fr 65em 2fr;
+            
+            
     }
+
+    .category{
+        line-height: 3vh;
+    }
+
     header h1 {
         text-align: left;
-        margin-left: 2.5em;
+        margin-left: 15vh;
         
     }
+
     #subtitle{
-        margin-left: 120px;
+        margin-left: 15vh;
         text-align: left;
+        font-size: 1.3vw;
+        
     }
+
+    th{
+        font-size: 1.3vw;
+    }
+
+    .rank{
+        width: auto;
+        padding-left: 2vw;
+    }
+
+    
+
 }
+
 
 
 
