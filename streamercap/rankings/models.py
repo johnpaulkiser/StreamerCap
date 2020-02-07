@@ -10,7 +10,7 @@ platforms = {
 }
 
 class Streamer(models.Model):
-    username = models.CharField(unique=True, max_length=50)
+    username = models.CharField(unique=False, max_length=50)
     platform = models.CharField(max_length=30, choices=platforms)
     # subscriber_count = models.IntegerField()
 
