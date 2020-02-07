@@ -63,9 +63,7 @@ th, td {
 #goto-top{
     flex-grow: 0;
 }
-#load-more:hover {
-    background: rgb(61, 122, 61);
-}
+
 #goto-top:hover {
     background: rgb(153, 65, 65);
 }

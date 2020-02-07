@@ -1,12 +1,21 @@
 let filterBy = {
     "page": 1,
-    "platform": [],
-    "game": [],
+    "platform": ["Twitch", "Mixer"],
+    "game": ["League of Legends", "Fortnite", "Just Chatting"],
     "language": []
 }
+
 updatePageFilters(filterBy);
+
 document.getElementById("goto-top").addEventListener("click", ()=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
+})
+
+document.getElementById("load-more").addEventListener("click", () => {
+    console.log(filterBy)
+    filterBy["page"]++;
+    updatePageFilters(filterBy);
+    console.log(filterBy);
 })
 
 function updatePageFilters(filterBy){
@@ -16,7 +25,7 @@ function updatePageFilters(filterBy){
     
         for(let i = 0; i < streams.length; i++){
             let row = table.insertRow(-1);
-            streams[i]["rank"] = i+1;
+            streams[i]["rank"] = 100 * (filterBy["page"]-1) + i + 1; // keeps track of rank, needs refactor
             populateRow(row, streams[i]);    
         }
     });
