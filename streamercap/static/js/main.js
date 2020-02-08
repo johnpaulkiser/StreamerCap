@@ -106,7 +106,6 @@ updateTableByFilters(filterBy);
 document.getElementById("load-more").addEventListener("click", () => {
     filterBy["page"]++;
     updateTableByFilters(filterBy);
-    console.log(filterBy);
 })
 
 async function getPageData(data = {}){
@@ -127,10 +126,18 @@ function updateTableByFilters(filterBy){
     let table = document.getElementById("table");
     getPageData(filterBy).then((streams) => {
         streams = streams["data"];
+        
         for(let i = 0; i < streams.length; i++){
             let row = table.insertRow(-1);
             streams[i]["rank"] = 100 * (filterBy["page"]-1) + i + 1; // keeps track of rank, needs refactor
             populateTableRow(row, streams[i]);    
+        }
+
+        const endMessage = document.getElementById("end-message");
+        if (streams.length < 100){ 
+            endMessage.style.display = "block";
+        } else {
+            endMessage.style.display = "none";
         }
     });
 }
@@ -211,3 +218,7 @@ function populateTableRow(row, stream) {
 
 
 /* Extra page functionality */
+
+function insertAfter(el, referenceNode) {
+    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+}

@@ -189,12 +189,12 @@ header h1 {
 
 
 .filter-items{
-  min-width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  padding-bottom: 4px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid lightgrey;
+    min-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid lightgrey;
   
 }
 
@@ -202,7 +202,7 @@ header h1 {
     display: none;
 }
 #language-wrapper :hover {
-    background: #ffa600;
+    background: #ff0055;
 }
 
 #game-wrapper{
@@ -262,7 +262,7 @@ button:hover {
 }
 
 #language-wrapper > .button-toggle {
-    background: #ffa600;
+    background: #ff0055;
 }
 
 #Twitch.button-toggle {
@@ -393,4 +393,15 @@ main {
 
 footer {
     grid-area: footer;
+}
+
+#end-message {
+    border-bottom: solid 1px grey;
+    display: none;
+}
+
+#end-message > p{
+    text-align: center;
+    font-size: 1.5em;
+    color: rgb(87, 87, 87);
 }

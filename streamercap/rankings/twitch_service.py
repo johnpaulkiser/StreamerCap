@@ -1,7 +1,7 @@
 import requests
 import json
 from .models import Streamer, LiveSession, Viewership
-from time import sleep
+from time import sleep, time
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -20,7 +20,6 @@ def make_streams_request(cursor=None):
 
 def get_top_games(num_pages):
     ''' Queries the twitch api to get the top (num_pages*100) games '''
-
     # open games file
     with open('games.json', 'r') as json_games:
         games_dict = json.loads(json_games.read())
@@ -37,6 +36,7 @@ def get_top_games(num_pages):
             URL = URL + paginated_URL
             
         response = requests.get(url=URL, headers=headers).json()
+        
         # update the pagination cursor
         cursor = response["pagination"]["cursor"]
         
@@ -53,9 +53,12 @@ def get_top_games(num_pages):
 def get_game_by_id(game_id):
     URL = f'https://api.twitch.tv/helix/games?id={game_id}'
     headers = {'Client-ID': config['TWITCH_ID']}
-    r = requests.get(url=URL, headers=headers)
+    try:
+        r = requests.get(url=URL, headers=headers)
+    except:
+        sleep(0.5)
+        r = requests.get(url=URL, headers=headers)
     print(r.json())
-    sleep(0.5)
     return r.json()['data'][0]['name']
 
 
@@ -67,7 +70,7 @@ def get_top_streams():
         top streams until reaching a stream 
         with less than 100 viewers.          
     '''
-    
+    start = time()
     with open('games.json', 'r') as json_games:
         games_dict = json.loads(json_games.read())
 
@@ -79,14 +82,15 @@ def get_top_streams():
         twitch_obj = make_streams_request(cursor=cursor)
         cursor = twitch_obj["pagination"]["cursor"]
         streams = twitch_obj["data"]
-    
+        print("Querying twitch api...")
         for stream in streams:
-            print(stream)
+            
             if stream['viewer_count'] < 100:
                 set_streams_offline(online_streams, 'Twitch')
                 with open('games.json', 'w') as out_file:
                     json.dump(games_dict, out_file, indent=2)
-                print(f"Finished Querying {len(online_streams)} streams from twitch")
+                    end = time()
+                print(f"Finished Querying {len(online_streams)} streams from twitch in {end - start} seconds")
                 return
             id = stream_to_db(stream, games_dict)
             if id == -1: # catch twitch not returning proper game id
@@ -112,6 +116,9 @@ def stream_to_db(stream, games_dict):
             return -1
 
         game_title  = get_game_by_id(game_id)
+        if game_title == "Just Chatting":
+           game_title = "IRL"
+
         game = games_dict[game_id] = game_title
         
 
@@ -137,8 +144,6 @@ def stream_to_db(stream, games_dict):
 def set_streams_offline(online_streamers, platform):
 
     offline_streams = LiveSession.objects.filter(is_live=True, streamer__platform=platform).exclude(streamer__in=online_streamers)       
-    print(online_streamers)
-    print(offline_streams)
     for stream in offline_streams:
         stream.is_live = False
         stream.save()
