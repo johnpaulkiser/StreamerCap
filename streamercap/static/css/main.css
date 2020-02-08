@@ -198,17 +198,19 @@ header h1 {
   
 }
 
-#lang-wrapper{
-    /* display: none; */
+#language-wrapper{
+    display: none;
+}
+#language-wrapper :hover {
+    background: #ffa600;
 }
 
 #game-wrapper{
     display: none;
-    
 }
 
 #game-wrapper :hover{
-    background: rgb(23, 158, 106);
+    background: #179e6a;
 }
 #platform-wrapper {
     display: none;
@@ -257,6 +259,10 @@ button:hover {
 
 #game-wrapper > .button-toggle {
     background: #179e6a;
+}
+
+#language-wrapper > .button-toggle {
+    background: #ffa600;
 }
 
 #Twitch.button-toggle {

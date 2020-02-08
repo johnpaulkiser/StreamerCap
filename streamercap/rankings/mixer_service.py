@@ -4,7 +4,7 @@ from .models import Streamer, LiveSession, Viewership
 from .twitch_service import set_streams_offline
 
 
-def get_top_streams(num=100):
+def make_request(num=100):
     '''can get a max of 100 streams per request '''
 
     URL = f'https://mixer.com/api/v1/channels?order=viewersCurrent:desc,limit={num}'
@@ -12,42 +12,55 @@ def get_top_streams(num=100):
     return r.json()
 
 
-def streams_to_db(num=100):
-    
-    online_streamers = set()
+def get_top_streams():
 
-    streams = get_top_streams(num)
-    print(json.dumps(streams, indent=2))
-    for stream in streams:
-        
-        
-        streamer, created = Streamer.objects.get_or_create(
-            username=stream['token'],
-            platform='Mixer'
-        )
-        online_streamers.add(streamer)
-        try:
-            game_title = stream['type']['name']
-        except KeyError:
-            game_title = "No Game Title"
-       
-        
+    online_streams = set()
+    while True:
+
+        streams = make_request()
+        for stream in streams:
+            if stream["viewersCurrent"] < 100:
+                set_streams_offline(online_streams, 'Mixer')
+                print(f'Finished Querying {len(online_streams)} streams from Mixer')
+                return
+
+            id = streams_to_db(stream)
+            online_streams.add(id)
             
 
-        session, created = LiveSession.objects.get_or_create(
-            streamer=streamer,
-            is_live=True,
-        )
-        session.title = stream['name']
-        session.game = game_title
-        
-        Viewership.objects.create(
-            live_session = session,
-            viewer_count = stream['viewersCurrent']
-        )
-        session.set_viewer_count()
-        session.save()
-        
-    set_streams_offline(online_streamers, 'Mixer')
+def streams_to_db(stream):
     
+    
+    streamer, created = Streamer.objects.get_or_create(
+        username=stream['token'],
+        platform='Mixer'
+    )
+    try:
+        game_title = stream['type']['name']
+    except KeyError:
+        game_title = "No Game Title"
+    
+    
+    session, created = LiveSession.objects.get_or_create(
+        streamer=streamer,
+        is_live=True,
+    )
+    session.title = stream['name']
+    session.game = game_title
+
+    if stream['languageId'] == None:
+        session.language = "en"
+    else:
+        session.language = stream['languageId']
+    
+    Viewership.objects.create(
+        live_session = session,
+        viewer_count = stream['viewersCurrent']
+    )
+    session.set_viewer_count()
+    session.save()
+    
+    return streamer.id
+    
+
 

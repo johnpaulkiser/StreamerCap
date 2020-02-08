@@ -9,6 +9,7 @@ platforms = {
     ('Facebook', 'Facebook'),
 }
 
+
 class Streamer(models.Model):
     username = models.CharField(unique=False, max_length=50)
     platform = models.CharField(max_length=30, choices=platforms)
@@ -27,9 +28,8 @@ class LiveSession(models.Model):
     title = models.CharField(max_length=200)
     viewer_count = models.IntegerField(null=True, blank=True)
     game = models.CharField(max_length=200)
-    # max_viewers = models.IntegerField()
-    # avg_viewers = models.IntegerField()
-    is_live = models.BooleanField()
+    language = models.CharField(max_length=10)
+    is_live = models.BooleanField(default='EN')
     rank = models.IntegerField(null=True, blank=True)
     
     #start_time = models.DateTimeField()

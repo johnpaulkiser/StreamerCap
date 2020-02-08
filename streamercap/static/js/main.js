@@ -23,13 +23,13 @@ document.getElementById("goto-top").addEventListener("click", ()=>{
 
 // category fields are identical to their respective button ids
 // & get request field parameter
-let filter_categories = ["game", "platform"];
+let filter_categories = ["game", "platform", "language"];
 
 initFilters(filter_categories);
 addCategoryListeners(filter_categories);
 
 function initFilters(categories){
-    console.log(categories);
+    
     categories.forEach(category => {
         // get top 10 in category
         getFilterData(category, 1).then((response) =>{
@@ -136,7 +136,11 @@ function updateTableByFilters(filterBy){
 }
 
 function flushTable(){
-    document.getElementById("table").innerHTML = "";
+    const table = document.getElementById("table").firstElementChild;
+    
+    while (table.childNodes.length > 1) {
+        table.removeChild(table.lastChild);
+    }
     filterBy["page"] = 1;
 }
 

@@ -1,13 +1,13 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from rankings.mixer_service import streams_to_db
+from rankings.mixer_service import get_top_streams
 import json
 
 class Command(BaseCommand):
     help = 'Updates the db with most recent twitch streams'
 
-    def add_arguments(self, parser):
-        parser.add_argument('amount to fetch', nargs='+', type=int)
+    # def add_arguments(self, parser):
+    #     parser.add_argument('amount to fetch', nargs='+', type=int)
 
     def handle(self, *args, **options):
-        streams_to_db(options['amount to fetch'][0])
+        get_top_streams()

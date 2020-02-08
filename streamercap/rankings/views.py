@@ -45,6 +45,7 @@ def build_filter_list(filter_data):
         filters["game__in"] = filter_data["game"]
     if filter_data["platform"] != []:
         filters["streamer__platform__in"] = filter_data["platform"]
-    #filter["language__in"] = filter_data["language"] not implemented yet
-    print(filters)
+    if filter_data["language"] != []:
+        filters["language__in"] = filter_data["language"]
+    
     return filters
