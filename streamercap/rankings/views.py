@@ -80,10 +80,7 @@ def build_delta_time_qs(times, query):
         
         q1 = query.filter(delta_time__lt=30*60) 
         result = q1 
-        # for i in result:
-        #     print(i.delta_time > 30*60)
         
-
     if "-1:30 hrs" in times:
         q2 = query.filter(delta_time__lt=60*60*1.5) 
         result = result | q2
