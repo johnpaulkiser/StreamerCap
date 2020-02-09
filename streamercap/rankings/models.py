@@ -30,18 +30,22 @@ class LiveSession(models.Model):
     game = models.CharField(max_length=200)
     language = models.CharField(max_length=10)
     is_live = models.BooleanField(default='EN')
-    rank = models.IntegerField(null=True, blank=True)
+    started_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    delta_time = models.FloatField(default=1)
     
-    #start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null=True, blank=True) 
     
-
     @property
     def stream_link(self):
-
         return f'https://{self.streamer.platform}.com/{self.streamer}'
 
+
+    def save(self, update_delta_time=False, *args, **kwargs):
+        if update_delta_time:
+            self.delta_time = (self.updated_at - self.started_at).total_seconds()
+        super(LiveSession, self).save(*args, **kwargs)
     
+
     def set_viewer_count(self):
         ''' sets the most recent viewership '''
 
@@ -52,7 +56,7 @@ class LiveSession(models.Model):
 
     def as_dict(self):
         return {
-            "rank": self.rank,
+            "rank": "null",
             "streamer": self.streamer.__str__(),
             "viewership": self.viewer_count,
             "category": self.game,

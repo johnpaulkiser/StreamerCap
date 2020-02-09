@@ -183,7 +183,9 @@ header h1 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 1vh;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid lightgrey;
 
 }
 
@@ -191,6 +193,7 @@ header h1 {
 .filter-items{
     min-width: 100%;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     padding-bottom: 4px;
     margin-bottom: 4px;
@@ -201,6 +204,13 @@ header h1 {
 #language-wrapper{
     display: none;
 }
+#length-wrapper{
+    display: none;
+}
+
+#length-wrapper :hover{
+    background: #1DA1F2;
+}
 #language-wrapper :hover {
     background: #ff0055;
 }
@@ -209,14 +219,16 @@ header h1 {
     display: none;
 }
 
+#filters-wrapper > div > button{
+    padding: .5em .75em;
+}
+
 #game-wrapper :hover{
     background: #179e6a;
 }
 #platform-wrapper {
     display: none;
 }
-
-
 
   
 button {
@@ -261,8 +273,13 @@ button:hover {
     background: #179e6a;
 }
 
+
 #language-wrapper > .button-toggle {
     background: #ff0055;
+}
+
+#length-wrapper > .button-toggle {
+    background: #1DA1F2;
 }
 
 #Twitch.button-toggle {
@@ -405,3 +422,23 @@ footer {
     font-size: 1.5em;
     color: rgb(87, 87, 87);
 }
+
+
+
+input[type=text] {
+    display: none;
+    width: 20%;
+    border: 2px solid #ccc;
+    padding: .5em .75em;
+    margin: .25em 0 .25em 0;
+    font-size: 1em;
+    border-radius: 25px;
+    -webkit-transition: width 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out;
+}
+  
+  /* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+    width: 97%;
+}
+

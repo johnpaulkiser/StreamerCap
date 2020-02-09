@@ -64,7 +64,11 @@ def streams_to_db(stream):
         viewer_count = stream['viewersCurrent']
     )
     session.set_viewer_count()
-    session.save()
+
+    if created: # don't calculate delta_time
+        session.save()
+    else:
+        session.save(update_delta_time=True)
     
     return streamer.id
     

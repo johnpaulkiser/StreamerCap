@@ -2,17 +2,15 @@ let filterBy = {
     "page": 1,
     "platform": [],
     "game": [],
-    "language": []
+    "language": [],
+    "length": []
 }
-
-
 
 
 
 document.getElementById("goto-top").addEventListener("click", ()=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
 })
-
 
 
 //
@@ -23,7 +21,9 @@ document.getElementById("goto-top").addEventListener("click", ()=>{
 
 // category fields are identical to their respective button ids
 // & get request field parameter
-let filter_categories = ["game", "platform", "language"];
+const filter_categories = ["game", "platform", "language", "length"];
+
+let gamesList = [];
 
 initFilters(filter_categories);
 addCategoryListeners(filter_categories);
@@ -34,14 +34,22 @@ function initFilters(categories){
         // get top 10 in category
         getFilterData(category, 1).then((response) =>{
             let wrapper = document.getElementById(category+"-wrapper");
+            let filter_items = response.data;
+
+            //initialize global games list 
+            if (category === "game"){
+                gamesList = filter_items;
+                filter_items = filter_items.slice(0,9);
+            }
+                
             //create button for every item in response
-            response.data.forEach(item => {
+            filter_items.forEach(item => {
                 let btn = document.createElement("button");
                 btn.innerHTML = item;
                 btn.category = category;
-                btn.addEventListener("click", toggleFilter)
+                btn.addEventListener("click", toggleFilter);
                 if (category === "platform")
-                    btn.setAttribute("id", item)
+                    btn.setAttribute("id", item);
                 wrapper.append(btn);
             });
         });
@@ -49,6 +57,7 @@ function initFilters(categories){
 }
 
 function toggleFilter(e){
+    // allows user to activate a filter
     let btn = e.target;
     let category = btn.category;
 
@@ -72,13 +81,21 @@ function addCategoryListeners(categories){
     categories.forEach(category => {
         document.getElementById(category).addEventListener("click", (e)=> {
             let wrapper = document.getElementById(`${category}-wrapper`);
-            console.log(wrapper.style.display);
             if( wrapper.style.display === "none" || wrapper.style.display === ""){
                 wrapper.style.display = "flex";
                 e.target.classList.add("button-toggle");
             } else {
                 wrapper.style.display = "none";
                 e.target.classList.remove("button-toggle");
+            }
+
+            if (category === "game") {
+                let input = document.getElementById("filter-input")
+                if( input.style.display === "none" || input.style.display === ""){
+                    input.style.display = "flex";
+                } else {
+                    input.style.display = "none";
+                }
             }
         })
     });
@@ -133,6 +150,8 @@ function updateTableByFilters(filterBy){
             populateTableRow(row, streams[i]);    
         }
 
+
+        // tells users they're are no more items
         const endMessage = document.getElementById("end-message");
         if (streams.length < 100){ 
             endMessage.style.display = "block";
@@ -217,8 +236,93 @@ function populateTableRow(row, stream) {
 }
 
 
+
+
+/* Search games functionality */
+
+
+function longestSubstringLength(word, sentence){
+    let longest = 0;
+    let current = 0;
+    for(let i = 0; i < sentence.length; i++){
+        if(word[current] == sentence[i]){
+            current++;
+            if(current > longest)
+                longest = current;
+            if(longest == word.length) return longest;
+        }else
+            current = 0;
+        
+    }
+    return longest;
+}
+
+function flushGamesFilters(){
+    let gameWrapper = document.getElementById("game-wrapper");
+    let childsArray = gameWrapper.children;
+    let toRemove = []
+    let toSkip = []
+    for(let i = 0; i < childsArray.length; i++){
+        console.log(childsArray[i]);
+        // remove all un-toggle children from list
+        if(!childsArray[i].classList.contains("button-toggle"))
+            toRemove.push(childsArray[i]);
+        else 
+            toSkip.push(childsArray[i].innerHTML);
+        
+    }
+    toRemove.forEach(element => {
+        element.remove();
+    });
+
+    return toSkip; // returns remaining (toggled) elements
+}
+
+
+const filterInput = document.getElementById("filter-input");
+filterInput.addEventListener("keyup", (e) => {
+    let word = e.target.value;
+
+    let matches = [];
+    gamesList.forEach(game => {
+        let longest = longestSubstringLength(word.toLowerCase(), game.toLowerCase());
+
+        // dont track games that have less than a match
+        if(longest >= word.length)
+            matches.push(game);
+
+    });
+
+    // clear game buttons unless toggled
+    // returns 
+    let leftOvers = flushGamesFilters();
+    
+    // add button to "game-wrapper" for each in matches.slice(0,9) 
+    addGameButtons(matches.slice(0,9), leftOvers);
+
+    
+    // console.log(matches.slice(0, 9));
+    // console.log("---------------------------");
+});
+
+
+// render all games from gamesToAdd except those in gamesToSkip
+function addGameButtons(gamesToAdd, gamesToSkip){
+    let gameWrapper = document.getElementById("game-wrapper");
+    gamesToAdd.forEach(game => {
+        if (!gamesToSkip.includes(game)){
+            let btn = document.createElement("button");
+            btn.innerHTML = game;
+            btn.category = "game";
+            btn.addEventListener("click", toggleFilter);
+            gameWrapper.appendChild(btn);
+        }
+    });
+}
+
+
+
+
 /* Extra page functionality */
 
-function insertAfter(el, referenceNode) {
-    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
-}
+

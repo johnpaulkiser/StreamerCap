@@ -18,7 +18,8 @@
     </header>
     
     <main>
-
+        
+        
         <div class="filter-categories">
             <button id="game">Game</button>
             <button id="platform">Platform</button>
@@ -26,9 +27,14 @@
             <button id="length">Length</button>
         </div>
         
-        <div class="filter-items" id="game-wrapper"></div>
-        <div class="filter-items" id="platform-wrapper"></div>
-        <div class="filter-items" id="language-wrapper"></div>
+        <input type="text" name="search-games" id="filter-input" placeholder="Search games...">
+        <div id="filters-wrapper">
+            <div class="filter-items" id="game-wrapper"> 
+            </div>
+            <div class="filter-items" id="platform-wrapper"></div>
+            <div class="filter-items" id="language-wrapper"></div>
+            <div class="filter-items" id="length-wrapper"></div>
+        <div>
        
         <table id="table">
             <tr id='table-header'>
