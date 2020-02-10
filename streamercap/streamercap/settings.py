@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-DEBUG = True
+DEBUG = False
 
-with open('config.json') as config_file:
+with open('/etc/config.json') as config_file:
     config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -30,7 +30,7 @@ SECRET_KEY = config['SECRET_KEY']
 
 
 ALLOWED_HOSTS = [
-        "3.84.61.175",
+        "52.90.21.71",
         "streamercap.com",
         "www.streamercap.com",
         "localhost"
