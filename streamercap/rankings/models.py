@@ -29,7 +29,7 @@ class LiveSession(models.Model):
     viewer_count = models.IntegerField(null=True, blank=True)
     game = models.CharField(max_length=200)
     language = models.CharField(max_length=10)
-    is_live = models.BooleanField(default='EN')
+    is_live = models.BooleanField()
     started_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     delta_time = models.FloatField(default=1)
