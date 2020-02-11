@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-DEBUG = False
+DEBUG = True
 
 with open('/etc/config.json') as config_file:
     config = json.load(config_file)
@@ -36,10 +36,19 @@ ALLOWED_HOSTS = [
         "localhost"
 ]
 
+CORS_ORIGIN_WHITELIST = [
+    "http://streamercap.com",    
+    "http://www.streamercap.com",
+    "https://streamercap.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
+]
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +59,11 @@ INSTALLED_APPS = [
     'rankings.apps.RankingsConfig',
 ]
 
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
