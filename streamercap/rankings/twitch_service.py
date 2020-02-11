@@ -53,12 +53,16 @@ def get_top_games(num_pages):
 def get_game_by_id(game_id):
     URL = f'https://api.twitch.tv/helix/games?id={game_id}'
     headers = {'Client-ID': config['TWITCH_ID']}
-    try:
+    
+    r = requests.get(url=URL, headers=headers)
+    tries = 0
+    while( 'error' in r.json()):
+        sleep(1)
         r = requests.get(url=URL, headers=headers)
-    except:
-        sleep(0.5)
-        r = requests.get(url=URL, headers=headers)
-    print(r.json())
+        print(r.json())
+        tries += 1
+        if tries > 5:
+            return "null"
     return r.json()['data'][0]['name']
 
 
@@ -116,20 +120,24 @@ def stream_to_db(stream, games_dict):
     )
     game_id = stream['game_id']
 
-    try:
+    # catch when twitch doesn't return a game id
+    if game_id == '':
+        return -1
+    
+    # check if game is in cache
+    if game_id in games_dict:
         game = games_dict[game_id]
-    except KeyError:
-        # TODO --- need to handle this exception differently
-        #sometimes twitch will return a game an empty game id ''
-        if game_id == '': 
+    else:
+        game_title = get_game_by_id(game_id)
+
+        if game_title == '':
+            # error querying game title
             return -1
 
-        game_title  = get_game_by_id(game_id)
         if game_title == "Just Chatting":
            game_title = "IRL"
-
         game = games_dict[game_id] = game_title
-        
+      
 
     session, created = LiveSession.objects.get_or_create(
         streamer=streamer,
