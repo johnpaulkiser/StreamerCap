@@ -80,6 +80,15 @@ def get_top_streams():
     while True: # loops untill reaching 100 viewers
 
         twitch_obj = make_streams_request(cursor=cursor)
+
+        # catch too many responses 
+        if 'error' in twitch_obj:
+            if twitch_obj['status'] == 429:
+                print(twitch_obj)
+                print("Too many requests.. slowing down")
+                sleep(0.5)
+                continue
+
         cursor = twitch_obj["pagination"]["cursor"]
         streams = twitch_obj["data"]
         print("Querying twitch api...")
