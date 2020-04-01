@@ -1,4 +1,4 @@
 # StreamerCap
 A website that ranks live streamers across platforms.
 
-[StreamerCap.com](StreamerCap)
+[StreamerCap.com](StreamerCap.com)
