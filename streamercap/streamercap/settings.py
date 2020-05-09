@@ -30,7 +30,8 @@ SECRET_KEY = config['SECRET_KEY']
 
 
 ALLOWED_HOSTS = [
-        "3.84.61.175",
+#        "3.84.61.175",
+        "127.0.0.1",
         "streamercap.com",
         "www.streamercap.com",
         "localhost"

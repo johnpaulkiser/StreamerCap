@@ -85,7 +85,7 @@ def get_top_streams():
         print("Querying twitch api...")
         for stream in streams:
             
-            if stream['viewer_count'] < 100:
+            if stream['viewer_count'] < 1000:
                 set_streams_offline(online_streams, 'Twitch')
                 with open('games.json', 'w') as out_file:
                     json.dump(games_dict, out_file, indent=2)
