@@ -37,10 +37,18 @@ ALLOWED_HOSTS = [
         "localhost"
 ]
 
+CORS_ORIGIN_WHITELIST = [
+    "http://streamercap.com",
+    "https://streamercap.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
+]
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,7 +59,11 @@ INSTALLED_APPS = [
     'rankings.apps.RankingsConfig',
 ]
 
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,21 +97,23 @@ WSGI_APPLICATION = 'streamercap.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config['DB_NAME'],
-#         'USER': config['DB_USER'],
-#         'PASSWORD': config['DB_PASSWORD'],
-#         'HOST': config["DB_HOST"],
-#         'PORT': config["DB_PORT"],
+#         'ENGINE'  : config["DB_ENGINE"],
+#         'NAME'    : config["DB_NAME"],
+#         'USER'    : config["DB_USER"],
+#         'PASSWORD': config["DB_PASSWORD"],
+#         'HOST'    : config["DB_HOST"],
+#         'PORT'    : config["DB_PORT"]
 #     }
 # }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE'  : 'django.db.backends.sqlite3',
+        'NAME'    : 'sqlite3.db',
+        
     }
 }
 

@@ -302,6 +302,24 @@ button:hover {
 }
 
 
+input[type=text] {
+    display: none;
+    width: 20%;
+    border: 2px solid #ccc;
+    padding: .5em .75em;
+    margin: .25em 0 .25em 0;
+    font-size: 1em;
+    border-radius: 25px;
+    -webkit-transition: width 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out;
+}
+  
+  /* When the input field gets focus, change its width to 100% */
+  input[type=text]:focus {
+    width: 93%;
+}
+
+
 
 
 /* LAYOUT */
@@ -321,6 +339,7 @@ body {
 }
 
 @media (min-width: 50em){
+    
     .title {
         display: inline-block;
     }
@@ -355,11 +374,15 @@ body {
     header{
         border-bottom: .25px solid rgb(194, 194, 194);
     }
+
+    input[type=text]:focus {
+        width: 96%;
+    }
 }
 
 /* Desktop */
 @media (min-width: 65em) {
-
+    
     body {
         
         grid:
@@ -398,6 +421,10 @@ body {
         padding-left: 2vw;
     }
 
+    input[type=text]:focus {
+        width: 97%;
+    }
+
     
 
 }
@@ -429,21 +456,4 @@ footer {
 }
 
 
-
-input[type=text] {
-    display: none;
-    width: 20%;
-    border: 2px solid #ccc;
-    padding: .5em .75em;
-    margin: .25em 0 .25em 0;
-    font-size: 1em;
-    border-radius: 25px;
-    -webkit-transition: width 0.3s ease-in-out;
-    transition: width 0.3s ease-in-out;
-}
-  
-  /* When the input field gets focus, change its width to 100% */
-input[type=text]:focus {
-    width: 97%;
-}
 

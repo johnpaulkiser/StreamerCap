@@ -263,7 +263,7 @@ function flushGamesFilters(){
     let toRemove = []
     let toSkip = []
     for(let i = 0; i < childsArray.length; i++){
-        console.log(childsArray[i]);
+        
         // remove all un-toggle children from list
         if(!childsArray[i].classList.contains("button-toggle"))
             toRemove.push(childsArray[i]);
@@ -300,9 +300,6 @@ filterInput.addEventListener("keyup", (e) => {
     // add button to "game-wrapper" for each in matches.slice(0,9) 
     addGameButtons(matches.slice(0,9), leftOvers);
 
-    
-    // console.log(matches.slice(0, 9));
-    // console.log("---------------------------");
 });
 
 
