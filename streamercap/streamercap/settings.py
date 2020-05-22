@@ -13,10 +13,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import json
 
-DEBUG = True
+DEBUG = False
 
 with open('/etc/config.json') as config_file:
     config = json.load(config_file)
+    print(config["DB_HOST"])
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +31,7 @@ SECRET_KEY = config['SECRET_KEY']
 
 
 ALLOWED_HOSTS = [
-        "52.90.21.71",
+        "54.221.133.151",
         "streamercap.com",
         "www.streamercap.com",
         "localhost"
@@ -97,16 +98,6 @@ WSGI_APPLICATION = 'streamercap.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config['DB_NAME'],
-#         'USER': config['DB_USER'],
-#         'PASSWORD': config['DB_PASSWORD'],
-#         'HOST': config["DB_HOST"],
-#         'PORT': config["DB_PORT"],
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -118,6 +109,14 @@ DATABASES = {
         'PORT'    : config["DB_PORT"]
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE'  : 'django.db.backends.sqlite3',
+#        'NAME'    : 'sqlite3.db',
+#        
+#    }
+#}
 
 
 # Password validation

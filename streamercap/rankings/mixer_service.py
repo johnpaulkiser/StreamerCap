@@ -35,15 +35,14 @@ def get_top_streams():
             
 
 def streams_to_db(stream):
-    
-    
     streamer, created = Streamer.objects.get_or_create(
         username=stream['token'],
         platform='Mixer'
     )
     try:
         game_title = stream['type']['name']
-    except KeyError:
+    except (KeyError, TypeError) as e:
+        print(e)
         game_title = "No Game Title"
     
     

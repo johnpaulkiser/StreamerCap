@@ -21,7 +21,9 @@ def make_streams_request(cursor=None):
 def get_top_games(num_pages):
     ''' Queries the twitch api to get the top (num_pages*100) games '''
     # open games file
-    with open('games.json', 'r') as json_games:
+#    with open('games.json', 'r') as json_games:
+
+    with open('/home/ubuntu/StreamerCap/streamercap/games.json', 'r') as json_games:
         games_dict = json.loads(json_games.read())
 
     URL = f'https://api.twitch.tv/helix/games/top?first=100'
@@ -53,12 +55,16 @@ def get_top_games(num_pages):
 def get_game_by_id(game_id):
     URL = f'https://api.twitch.tv/helix/games?id={game_id}'
     headers = {'Client-ID': config['TWITCH_ID']}
-    try:
+    
+    r = requests.get(url=URL, headers=headers)
+    tries = 0
+    while( 'error' in r.json()):
+        sleep(1)
         r = requests.get(url=URL, headers=headers)
-    except:
-        sleep(0.5)
-        r = requests.get(url=URL, headers=headers)
-    print(r.json())
+        print(r.json())
+        tries += 1
+        if tries > 5:
+            return "null"
     return r.json()['data'][0]['name']
 
 
@@ -71,7 +77,8 @@ def get_top_streams():
         with less than 100 viewers.          
     '''
     start = time()
-    with open('games.json', 'r') as json_games:
+#    with open('games.json', 'r') as json_games:
+    with open ('/home/ubuntu/StreamerCap/streamercap/games.json') as json_games:
         games_dict = json.loads(json_games.read())
 
     online_streams = set()
@@ -80,6 +87,15 @@ def get_top_streams():
     while True: # loops untill reaching 100 viewers
 
         twitch_obj = make_streams_request(cursor=cursor)
+
+        # catch too many responses 
+        if 'error' in twitch_obj:
+            if twitch_obj['status'] == 429:
+                print(twitch_obj)
+                print("Too many requests.. slowing down")
+                sleep(0.5)
+                continue
+
         cursor = twitch_obj["pagination"]["cursor"]
         streams = twitch_obj["data"]
         print("Querying twitch api...")
@@ -107,20 +123,24 @@ def stream_to_db(stream, games_dict):
     )
     game_id = stream['game_id']
 
-    try:
+    # catch when twitch doesn't return a game id
+    if game_id == '':
+        return -1
+    
+    # check if game is in cache
+    if game_id in games_dict:
         game = games_dict[game_id]
-    except KeyError:
-        # TODO --- need to handle this exception differently
-        #sometimes twitch will return a game an empty game id ''
-        if game_id == '': 
+    else:
+        game_title = get_game_by_id(game_id)
+
+        if game_title == '':
+            # error querying game title
             return -1
 
-        game_title  = get_game_by_id(game_id)
         if game_title == "Just Chatting":
            game_title = "IRL"
-
         game = games_dict[game_id] = game_title
-        
+      
 
     session, created = LiveSession.objects.get_or_create(
         streamer=streamer,

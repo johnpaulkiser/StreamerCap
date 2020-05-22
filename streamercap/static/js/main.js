@@ -6,7 +6,7 @@ let filterBy = {
     "length": []
 }
 
-
+const url = "https://www.streamercap.com/";
 
 document.getElementById("goto-top").addEventListener("click", ()=>{
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -106,7 +106,7 @@ async function getFilterData(field, page){
     /*  response format:
         {data: ["item1", "item2", "item3", ... ]}
     */
-    const response = await fetch(`http://52.90.21.71/${field}/${page}`)
+    const response = await fetch(`${url}${field}/${page}`)
     return await response.json();
 }
 
@@ -127,7 +127,7 @@ document.getElementById("load-more").addEventListener("click", () => {
 
 async function getPageData(data = {}){
     
-    const response = await fetch('http://52.90.21.71/', {
+    const response = await fetch(url, {
         method: 'POST',
         headers:{
             'Content-Type': 'application/json'
