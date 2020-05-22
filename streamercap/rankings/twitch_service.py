@@ -5,13 +5,22 @@ from time import sleep, time
 
 with open('/etc/config.json') as config_file:
     config = json.load(config_file)
+    print(config)
 
 
+def refresh_twitch_auth():
+    URL = f'https://id.twitch.tv/oauth2/token?client_id={config["TWITCH_ID"]}&client_secret={config["SECRET_KEY"]}&grant_type=client_credentials'
+    response = requests.post(url=URL).json()
+    config['ACCESS_TOKEN'] = response["access_token"]
+    with open('config.json', 'w') as config_out:
+        json.dump(config, config_out, indent=4)        
+    print(response)
 
 def make_streams_request(cursor=None):
     URL = f'https://api.twitch.tv/helix/streams?first=100'
     paginated_URL = f'&after={cursor}'
-    headers = {'Client-ID': config['TWITCH_ID']}
+    headers = {'Client-ID': config['TWITCH_ID'], 
+               'Authorization': f'Bearer {config["ACCESS_TOKEN"]}'}
     if cursor:
         URL = URL + paginated_URL
     r = requests.get(url=URL, headers=headers)
@@ -19,7 +28,9 @@ def make_streams_request(cursor=None):
 
 
 def get_top_games(num_pages):
+    
     ''' Queries the twitch api to get the top (num_pages*100) games '''
+
     # open games file
 #    with open('games.json', 'r') as json_games:
 
@@ -27,7 +38,8 @@ def get_top_games(num_pages):
         games_dict = json.loads(json_games.read())
 
     URL = f'https://api.twitch.tv/helix/games/top?first=100'
-    headers = {'Client-ID': config['TWITCH_ID']}
+    headers = {'Client-ID': config['TWITCH_ID'],
+               'Authorization': f'Bearer {config["ACCESS_TOKEN"]}'}
     cursor = "none"
 
     for i in range(num_pages):
@@ -38,7 +50,7 @@ def get_top_games(num_pages):
             URL = URL + paginated_URL
             
         response = requests.get(url=URL, headers=headers).json()
-        
+        print(response) 
         # update the pagination cursor
         cursor = response["pagination"]["cursor"]
         
@@ -54,7 +66,8 @@ def get_top_games(num_pages):
 
 def get_game_by_id(game_id):
     URL = f'https://api.twitch.tv/helix/games?id={game_id}'
-    headers = {'Client-ID': config['TWITCH_ID']}
+    headers = {'Client-ID': config['TWITCH_ID'],
+               'Authorization': f'Bearer {config["ACCESS_TOKEN"]}'}
     
     r = requests.get(url=URL, headers=headers)
     tries = 0
@@ -95,13 +108,13 @@ def get_top_streams():
                 print("Too many requests.. slowing down")
                 sleep(0.5)
                 continue
-
+        print(twitch_obj)
         cursor = twitch_obj["pagination"]["cursor"]
         streams = twitch_obj["data"]
         print("Querying twitch api...")
         for stream in streams:
             
-            if stream['viewer_count'] < 100:
+            if stream['viewer_count'] < 1000:
                 set_streams_offline(online_streams, 'Twitch')
                 with open('games.json', 'w') as out_file:
                     json.dump(games_dict, out_file, indent=2)
