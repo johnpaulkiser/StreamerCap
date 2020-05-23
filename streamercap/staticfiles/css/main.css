@@ -4,7 +4,7 @@ html {
 }
 .streamer a{
     text-decoration: none;
-    color: rgb(15, 15, 15);
+    //color: rgb(15, 15, 15);
     
 }
 
@@ -70,7 +70,8 @@ th, td {
 
 
 .viewership {
-    color: rgb(22, 22, 255);
+    color: rgb(15, 15, 15);
+    font-weight: 800;
     text-align: right;
 }
 
@@ -96,11 +97,15 @@ th, td {
     
 }
 
+.streamer_header{
+    text-align: center;
+}
+
 .streamer{
     text-align: center;
     overflow: auto;
-    
 }
+
 .streamer>a{
     font-weight: lighter;
 }

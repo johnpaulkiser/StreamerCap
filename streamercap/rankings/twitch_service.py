@@ -3,9 +3,8 @@ import json
 from .models import Streamer, LiveSession, Viewership
 from time import sleep, time
 
-with open('/etc/config.json') as config_file:
+with open('config.json') as config_file:
     config = json.load(config_file)
-    print(config)
 
 
 def refresh_twitch_auth():
@@ -14,7 +13,6 @@ def refresh_twitch_auth():
     config['ACCESS_TOKEN'] = response["access_token"]
     with open('config.json', 'w') as config_out:
         json.dump(config, config_out, indent=4)        
-    print(response)
 
 def make_streams_request(cursor=None):
     URL = f'https://api.twitch.tv/helix/streams?first=100'
@@ -50,7 +48,6 @@ def get_top_games(num_pages):
             URL = URL + paginated_URL
             
         response = requests.get(url=URL, headers=headers).json()
-        print(response) 
         # update the pagination cursor
         cursor = response["pagination"]["cursor"]
         
@@ -74,7 +71,6 @@ def get_game_by_id(game_id):
     while( 'error' in r.json()):
         sleep(1)
         r = requests.get(url=URL, headers=headers)
-        print(r.json())
         tries += 1
         if tries > 5:
             return "null"

@@ -15,7 +15,7 @@ import json
 
 DEBUG = False
 
-with open('/etc/config.json') as config_file:
+with open('config.json') as config_file:
     config = json.load(config_file)
     print(config["DB_HOST"])
 
